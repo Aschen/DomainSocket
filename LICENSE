@@ -1,5 +1,4 @@
-/*
- This is free and unencumbered software released into the public domain.
+This is free and unencumbered software released into the public domain.
 
 Anyone is free to copy, modify, publish, use, compile, sell, or
 distribute this software, either in source code form or as a compiled
@@ -23,44 +22,3 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 For more information, please refer to <http://unlicense.org>
-*/
-
-#include "Sender.hh"
-
-Sender::Sender(const std::string &path, const std::string &msg)
-    : _local(path, DomainSocket::CLIENT)
-{
-    if (_local.isRunning())
-    {
-        try
-        {
-            _local.sendMsg(msg);
-            std::cout << msg << " : Sended to server !" << std::endl;
-            std::cout << "Server response : " << _local.recvMsg() << std::endl;
-        }
-        catch (std::runtime_error &e)
-        {
-            std::cout << e.what() << std::endl;
-        }
-    }
-}
-
-int main(int ac, char **av)
-{
-    if (ac != 3)
-    {
-        std::cout << "Usage : " << av[0] << " <socket_path> <msg>" << std::endl;
-        return 1;
-    }
-
-    try
-    {
-        Sender      s(av[1], av[2]);
-    }
-    catch (std::runtime_error &e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-
-    return 0;
-}
