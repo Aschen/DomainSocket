@@ -17,6 +17,7 @@
 class DomainSocket
 {
 public:
+    // Handle client disconnection
     class Disconnected : public std::exception
     {
     public:
@@ -24,13 +25,14 @@ public:
         ~Disconnected(void) throw() { }
     };
 
+    // 3 types of DomainSocket
 public:
-    typedef enum e_type
+    typedef enum    e_type
     {
-        SERVER          = 0,
-        SERVER_CLIENT,
-        CLIENT
-    } TYPE;
+        SERVER          = 0, // The server part
+        SERVER_CLIENT,       // Used by the server to handle new clients
+        CLIENT               // Client that actually connect to the server
+    }               TYPE;
 
 private:
     bool                        _run;
@@ -46,9 +48,13 @@ public:
 
     ~DomainSocket(void);
 
+    // Accept a new client and return a DomainSocket of type SERVER_CLIENT
     DomainSocket                *acceptClient(void);
+    // Send a msg throught the socket (Only SERVER_CLIENT or CLIENT socket)
     void                        sendMsg(const std::string &msg);
-    std::string                 recvMsg(void);
+    // Receive a msg throught the socket (Only SERVER_CLIENT or CLIENT socket)
+    const std::string           recvMsg(void);
+    // Close the socket
     void                        closeSocket(void);
 
 public:
