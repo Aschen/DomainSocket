@@ -34,9 +34,9 @@ Daemon::Daemon(const std::string &path)
 
 Daemon::~Daemon(void)
 {
-    for (DomainSocket* client : _clients)
+    for (DomainSocket::iterator it = _clients.begin; it < _clients.end(); ++it)
     {
-        delete client;
+        delete *it;
     }
 }
 
