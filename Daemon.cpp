@@ -93,13 +93,13 @@ int Daemon::initSelect(struct timeval *tv, fd_set *readfds, fd_set *writefds)
         FD_ZERO(writefds);
         FD_SET(_local.fd(), writefds);
     }
-    for (DomainSocket *client : _clients)
+    for (DomainSocket::iterator it = _clients.begin; it < _clients.end(); ++it)
     {
-        FD_SET(client->fd(), readfds);
+        FD_SET((*it)->fd(), readfds);
         if (writefds != NULL)
-            FD_SET(client->fd(), writefds);
+            FD_SET((*it)->fd(), writefds);
         // Check if client's fd is greater than actual fd_max
-        fd_max = (fd_max < client->fd()) ? client->fd() : fd_max;
+        fd_max = (fd_max < (*it)->fd()) ? (*it)->fd() : fd_max;
     }
     return fd_max + 1;
 }
