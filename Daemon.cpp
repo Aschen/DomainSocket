@@ -34,9 +34,9 @@ Daemon::Daemon(const std::string &path)
 
 Daemon::~Daemon(void)
 {
-    for (DomainSocket::iterator it = _clients.begin; it < _clients.end(); ++it)
+    for (unsigned int i = 0; i < _clients.size(); ++i)
     {
-        delete *it;
+        delete _clients[i];
     }
 }
 
@@ -93,13 +93,13 @@ int Daemon::initSelect(struct timeval *tv, fd_set *readfds, fd_set *writefds)
         FD_ZERO(writefds);
         FD_SET(_local.fd(), writefds);
     }
-    for (DomainSocket::iterator it = _clients.begin; it < _clients.end(); ++it)
+    for (unsigned int i = 0; i < _clients.size(); ++i)
     {
-        FD_SET((*it)->fd(), readfds);
+        FD_SET(_clients[i]->fd(), readfds);
         if (writefds != NULL)
-            FD_SET((*it)->fd(), writefds);
+            FD_SET(_clients[i]->fd(), writefds);
         // Check if client's fd is greater than actual fd_max
-        fd_max = (fd_max < (*it)->fd()) ? (*it)->fd() : fd_max;
+        fd_max = (fd_max < _clients[i]->fd()) ? _clients[i]->fd() : fd_max;
     }
     return fd_max + 1;
 }
