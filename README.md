@@ -1,5 +1,5 @@
 # DomainSocket
-Server - Client communication via unix domain socket
+Server - Client communication using unix domain socket
 
 Functionnality
 --------------
